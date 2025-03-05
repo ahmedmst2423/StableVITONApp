@@ -22,7 +22,11 @@ export default function TryOnWindow() {
         <Text variant="headlineMedium" style={styles.title}>
           Try On Window
         </Text>
-        <Image source={{ uri: prediction }} style={styles.image} />
+        <Image 
+          source={{ uri: prediction }} 
+          style={styles.image} 
+          resizeMode="contain"
+        />
         <Text variant="bodyMedium" style={styles.caption}>
           This is your predicted try-on image.
         </Text>

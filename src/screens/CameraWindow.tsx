@@ -2,14 +2,16 @@ import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
 import { useState, useRef } from "react";
 import { Button, Text, TouchableRipple, Surface } from "react-native-paper";
 import { Image, StyleSheet, View } from "react-native";
-import { useImageContext } from "../contexts/ImageContext";
+import { useVtonImageContext } from "../contexts/VtonImageContext";
+import { useErrorContext } from "../contexts/ErrorContext";
 import * as FileSystem from "expo-file-system";
 
 export default function CameraWindow() {
   const [facing, setFacing] = useState<CameraType>("back");
   const [permission, requestPermission] = useCameraPermissions();
   const cameraRef = useRef<CameraView | null>(null);
-  const { imageUri, setImageUri } = useImageContext();
+  const { vtonImageUri, setVtonImageUri } = useVtonImageContext();
+  const { setError } = useErrorContext();
 
   if (!permission) {
     return <View />;
@@ -34,34 +36,50 @@ export default function CameraWindow() {
 
   const takePicture = async () => {
     if (cameraRef.current) {
-      const photo = await cameraRef.current.takePictureAsync();
-      if (photo?.uri) {
-        // Define the destination directory (persistent storage)
-        const newDir = FileSystem.documentDirectory + "images/";
-        // Check if the directory exists; if not, create it.
-        const dirInfo = await FileSystem.getInfoAsync(newDir);
-        if (!dirInfo.exists) {
-          await FileSystem.makeDirectoryAsync(newDir, { intermediates: true });
+      try {
+        const photo = await cameraRef.current.takePictureAsync();
+        if (photo?.uri) {
+          try {
+            // Define the destination directory (persistent storage)
+            const newDir = FileSystem.documentDirectory + "images/";
+            // Check if the directory exists; if not, create it.
+            const dirInfo = await FileSystem.getInfoAsync(newDir);
+            if (!dirInfo.exists) {
+              await FileSystem.makeDirectoryAsync(newDir, { intermediates: true });
+            }
+            // Create a unique file name using the current timestamp
+            const newPath = newDir + new Date().getTime() + ".jpg";
+            // Move the image file from its current (cache) location to the permanent directory
+            await FileSystem.moveAsync({
+              from: photo.uri,
+              to: newPath,
+            });
+            // Save the new URI in your context
+            setVtonImageUri(newPath);
+          } catch (error) {
+            const errorMessage = error instanceof Error 
+              ? error.message 
+              : "Failed to save photo";
+            setError(`Camera error: ${errorMessage}`);
+          }
         }
-        // Create a unique file name using the current timestamp
-        const newPath = newDir + new Date().getTime() + ".jpg";
-        // Move the image file from its current (cache) location to the permanent directory
-        await FileSystem.moveAsync({
-          from: photo.uri,
-          to: newPath,
-        });
-        // Save the new URI in your context
-        setImageUri(newPath);
+      } catch (error) {
+        const errorMessage = error instanceof Error 
+          ? error.message 
+          : "Failed to take photo";
+        setError(`Camera error: ${errorMessage}`);
       }
+    } else {
+      setError("Camera is not ready. Please try again.");
     }
   };
 
   return (
     <Surface style={styles.container}>
-      {imageUri ? (
+      {vtonImageUri ? (
         <>
-          <Image source={{ uri: imageUri }} style={styles.preview} />
-          <Button mode="contained" onPress={() => setImageUri(null)}>
+          <Image source={{ uri: vtonImageUri }} style={styles.preview} resizeMode="cover" />
+          <Button mode="contained" onPress={() => setVtonImageUri(null)}>
             Retake
           </Button>
         </>
@@ -98,40 +116,38 @@ const styles = StyleSheet.create({
   message: {
     textAlign: "center",
     paddingBottom: 10,
-    margin: 16,
   },
   camera: {
     flex: 1,
   },
   buttonContainer: {
-    flex: 1,
+    position: "absolute",
+    bottom: 0,
     flexDirection: "row",
-    backgroundColor: "transparent",
-    margin: 64,
-    alignItems: "flex-end",
+    width: "100%",
+    padding: 20,
     justifyContent: "space-between",
   },
   button: {
     padding: 10,
-    backgroundColor: "rgba(0,0,0,0.5)",
     borderRadius: 5,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   text: {
-    fontSize: 18,
     color: "white",
   },
   captureButton: {
-    width: 70,
     height: 70,
-    backgroundColor: "white",
+    width: 70,
     borderRadius: 35,
-    alignSelf: "center",
-    marginBottom: 20,
+    backgroundColor: "#fff",
+    borderWidth: 5,
+    borderColor: "rgba(0, 0, 0, 0.2)",
   },
   preview: {
     width: "100%",
-    height: "80%",
-    resizeMode: "cover",
-    borderRadius: 10,
+    height: "75%",
+    borderRadius: 8,
+    marginBottom: 20,
   },
 });

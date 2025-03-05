@@ -9,7 +9,7 @@ const ApiContext = createContext<ApiContextType | undefined>(undefined);
 
 export const ApiProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // Initialize the endpoint from an environment variable or a default value
-  const [endpoint, setEndpoint] = useState<string>(process.env.REACT_APP_BASE_API || "http://192.168.18.62:5000");
+  const [endpoint, setEndpoint] = useState<string>(process.env.REACT_APP_BASE_API || "https://267a-110-38-229-3.ngrok-free.app");
 
   return (
     <ApiContext.Provider value={{ endpoint, setEndpoint }}>

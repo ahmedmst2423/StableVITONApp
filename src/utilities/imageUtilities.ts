@@ -1,10 +1,6 @@
 import { useCallback } from "react";
 
-export const useImageUtilities = () => {
-
-
-
-    
+export const useImageUtilities = () => {    
   const blobToBase64 = useCallback((blob: Blob): Promise<string> => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();

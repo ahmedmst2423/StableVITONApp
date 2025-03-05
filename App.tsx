@@ -3,8 +3,10 @@ import { PaperProvider, MD3LightTheme as DefaultTheme } from "react-native-paper
 import StackNavigation from "./src/navigation/StackNavigation";
 import Wardrobe from "./src/screens/Wardrobe";
 import CameraWindow from "./src/screens/CameraWindow";
-import { ImageProvider } from "./src/contexts/ImageContext";
+import { VtonImageProvider } from "./src/contexts/VtonImageContext";
+import { ClothImageProvider } from "./src/contexts/ClothImageContext";
 import { ApiProvider } from "./src/contexts/apiContext";
+import { ErrorProvider } from "./src/contexts/ErrorContext";
 import WardrobeHeader from "./src/components/WardrobeHeader";
 import { MD3Colors } from "react-native-paper/lib/typescript/types";
 import TryOnWindow from "./src/screens/TryOnWindow";
@@ -36,11 +38,15 @@ const headerOptions = {
 export default function App() {
   return (
     <PaperProvider theme={theme}>
-      <ApiProvider>
-        <ImageProvider>
-          <StackNavigation routes={routes} headerOptions={headerOptions} />
-        </ImageProvider>
-      </ApiProvider>
+      <ErrorProvider>
+        <ApiProvider>
+          <VtonImageProvider>
+            <ClothImageProvider>
+              <StackNavigation routes={routes} headerOptions={headerOptions} />
+            </ClothImageProvider>
+          </VtonImageProvider>
+        </ApiProvider>
+      </ErrorProvider>
     </PaperProvider>
   );
 }
