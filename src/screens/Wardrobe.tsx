@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet, ScrollView, Image, Dimensions, View } from "react-native";
-import { Surface, Text, Button, TouchableRipple, Portal, Dialog, IconButton } from "react-native-paper";
+import { Surface, Text, Button, TouchableRipple, Portal, Dialog, IconButton, ActivityIndicator } from "react-native-paper";
 import ClothCard from "../components/ClothCard";
 import { useVtonImageContext } from "../contexts/VtonImageContext";
 import { useClothImageContext } from "../contexts/ClothImageContext";
@@ -14,7 +14,7 @@ export default function Wardrobe() {
   const navigation = useNavigation<any>();
   const { vtonImageUri, setVtonImageUri } = useVtonImageContext();
   const { clothImageUri, setClothImageUri } = useClothImageContext();
-  const { apiCall } = useApiCall();
+  const { apiCall, isLoading: isApiLoading } = useApiCall();
   const { setError } = useErrorContext();
   const [selectedClothId, setSelectedClothId] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
@@ -68,6 +68,12 @@ export default function Wardrobe() {
   };
 
   const handlePredict = async () => {
+    // Check if API is still initializing
+    if (isApiLoading) {
+      setError("API is still initializing. Please wait a moment and try again.");
+      return;
+    }
+    
     // Check if both images are available
     if (!vtonImageUri) {
       setError("No person image captured. Please take or upload a picture first.");
