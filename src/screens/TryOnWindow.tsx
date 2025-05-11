@@ -1,40 +1,49 @@
 import React from "react";
-import { StyleSheet, Image, ScrollView, Dimensions } from "react-native";
-import { Surface, Text, Button } from "react-native-paper";
-import { useRoute, RouteProp, useNavigation } from "@react-navigation/native";
+import { StyleSheet, Image, ScrollView, Dimensions, SafeAreaView, View } from "react-native";
+import { Appbar, Card, Text, Button, useTheme } from "react-native-paper";
+import { useRoute, useNavigation, RouteProp } from "@react-navigation/native";
 
 type RootStackParamList = {
   TryOnWindow: { prediction: string };
 };
 
-type TryOnWindowRouteProp = RouteProp<RootStackParamList, "TryOnWindow">;
+type TryOnWindowRouteProp = RouteProp<RootStackParamList, 'TryOnWindow'>;
 
 export default function TryOnWindow() {
   const route = useRoute<TryOnWindowRouteProp>();
   const navigation = useNavigation();
-  let { prediction } = route.params;
+  const { colors } = useTheme();
+  // const { prediction } = route.params;
+  const prediction = "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZmFzaGlvbnxlbnwwfHwwfHx8MA%3D%3D";
 
-  // Ensure the prediction string is a valid data URI.
- 
   return (
-    <Surface style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>      
+      <Appbar.Header>
+        <Appbar.BackAction onPress={() => navigation.goBack()} />
+        <Appbar.Content title="Try-On Preview" />
+      </Appbar.Header>
+
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <Text variant="headlineMedium" style={styles.title}>
-          Try On Window
-        </Text>
-        <Image 
-          source={{ uri: prediction }} 
-          style={styles.image} 
-          resizeMode="contain"
-        />
-        <Text variant="bodyMedium" style={styles.caption}>
-          This is your predicted try-on image.
-        </Text>
-        <Button mode="contained" onPress={() => navigation.goBack()} style={styles.button}>
+        <Card style={styles.card} elevation={4}>
+          <Card.Cover source={{ uri: prediction }} style={styles.image} />
+          <Card.Content>
+            <Text style={styles.caption} variant="titleMedium" >
+              Your Style Snap!!!.
+            </Text>
+          </Card.Content>
+        </Card>
+
+        <Button
+          mode="contained"
+          onPress={() => navigation.goBack()}
+          style={styles.button}
+          contentStyle={styles.buttonContent}
+          uppercase={false}
+        >
           Back
         </Button>
       </ScrollView>
-    </Surface>
+    </SafeAreaView>
   );
 }
 
@@ -43,29 +52,31 @@ const windowHeight = Dimensions.get("window").height;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 12,
   },
   scrollContainer: {
     flexGrow: 1,
     alignItems: "center",
     justifyContent: "center",
+    padding: 16,
   },
-  title: {
-    marginBottom: 16,
-    textAlign: "center",
+  card: {
+    width: '100%',
+    borderRadius: 12,
+    overflow: 'hidden',
+    marginBottom: 24,
   },
   image: {
-    width: "100%",
     height: windowHeight * 0.5,
-    resizeMode: "contain",
-    borderRadius: 8,
-    marginBottom: 16,
+    resizeMode: "cover",
   },
   caption: {
-    marginBottom: 16,
     textAlign: "center",
+    marginTop: 12,
   },
   button: {
-    width: "60%",
+    width: '60%',
+  },
+  buttonContent: {
+    paddingVertical: 8,
   },
 });

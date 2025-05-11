@@ -12,6 +12,7 @@
     "@react-native-async-storage/async-storage": "^2.1.2",
     "@react-navigation/stack": "^7.1.1",
     "axios": "^1.8.1",
+    "eas": "^0.1.0",
     "expo": "~52.0.37",
     "expo-camera": "~16.0.17",
     "expo-image-picker": "~16.0.6",

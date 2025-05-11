@@ -239,7 +239,7 @@ export default function Wardrobe() {
           </TouchableRipple>
         </Surface>
 
-        {/* Bottom Section: Horizontal ScrollView of ClothCards */}
+        {/* Bottom Section: Horizontal ScrollView of ClothCards
         <Surface style={styles.bottomSection}>
           <Text style={styles.sectionTitle}>Your Wardrobe</Text>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -262,18 +262,19 @@ export default function Wardrobe() {
               </TouchableRipple>
             ))}
           </ScrollView>
-        </Surface>
+        </Surface> */}
         
         {/* Predict Button */}
-        <Button
+        
+      </ScrollView>
+      <Button
           mode="contained"
           onPress={handlePredict}
           loading={loading}
           style={styles.predictButton}
         >
-          Predict
+          Try On
         </Button>
-      </ScrollView>
 
       {/* Modal for Camera/Upload options */}
       <Portal>
@@ -307,6 +308,7 @@ export default function Wardrobe() {
 }
 
 const windowHeight = Dimensions.get("window").height;
+const windowWidth = Dimensions.get("window").width;
 
 const styles = StyleSheet.create({
   container: {
@@ -331,7 +333,7 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     width: "100%",
-    height: windowHeight * 0.25,
+    height: (windowWidth * 0.75), // 3/4 aspect ratio (height = width * 3/4)
     borderRadius: 8,
     marginBottom: 16,
     position: 'relative',

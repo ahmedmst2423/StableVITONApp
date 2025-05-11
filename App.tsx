@@ -23,15 +23,26 @@ const theme = {
 };
 
 const routes = {
-  Wardrobe: Wardrobe,
-  CameraWindow: CameraWindow,
+  Wardrobe:Wardrobe,
+  CameraWindow:CameraWindow,
   TryOnWindow:TryOnWindow
 };
 
 const headerOptions = {
   Wardrobe: {
     // Use the custom WardrobeHeader as the header title for the Wardrobe screen
-    headerRight: () => <WardrobeHeader />,
+    // headerRight: () => <WardrobeHeader />,
+    headerTitle: "Wardrobe",
+    headerTitleAlign: "left",
+    // headerShown: false,
+  },
+  CameraWindow: {
+    // Use the custom WardrobeHeader as the header title for the Wardrobe screen
+    headerShown: false,
+  },
+  TryOnWindow: {
+    // Use the custom WardrobeHeader as the header title for the Wardrobe screen
+    headerShown: false,
   },
 };
 
