@@ -6,7 +6,7 @@ import { useErrorContext } from "./ErrorContext";
 const API_ENDPOINT_STORAGE_KEY = "app_api_endpoint";
 
 // Default API endpoint to use if none is stored
-const DEFAULT_API_ENDPOINT = "https://267a-110-38-229-3.ngrok-free.app";
+const DEFAULT_API_ENDPOINT = "https://59d4.110-38-229-3.ngrok-free.app";
 
 export interface ApiContextType {
   endpoint: string;
@@ -22,25 +22,25 @@ export const ApiProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const { setError } = useErrorContext();
 
   // Load the stored endpoint when the component mounts
-  useEffect(() => {
-    const loadStoredEndpoint = async () => {
-      try {
-        setIsLoading(true);
-        const storedEndpoint = await AsyncStorage.getItem(API_ENDPOINT_STORAGE_KEY);
+  // useEffect(() => {
+  //   const loadStoredEndpoint = async () => {
+  //     try {
+  //       setIsLoading(true);
+  //       const storedEndpoint = await AsyncStorage.getItem(API_ENDPOINT_STORAGE_KEY);
         
-        if (storedEndpoint) {
-          setEndpointState(storedEndpoint);
-        }
-      } catch (error) {
+  //       if (storedEndpoint) {
+  //         setEndpointState(storedEndpoint);
+  //       }
+  //     } catch (error) {
         
-        setError("Failed to load API settings. Using default API endpoint.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  //       setError("Failed to load API settings. Using default API endpoint.");
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
 
-    loadStoredEndpoint();
-  }, [setError]);
+  //   loadStoredEndpoint();
+  // }, [setError]);
 
   // Custom setter that updates both state and AsyncStorage
   const setEndpoint = async (newEndpoint: string) => {
