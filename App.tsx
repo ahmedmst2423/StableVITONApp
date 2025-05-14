@@ -33,6 +33,12 @@ const headerOptions = {
     // Use the custom WardrobeHeader as the header title for the Wardrobe screen
     headerRight: () => <WardrobeHeader />,
   },
+  TryOnWindow: {
+    headerShown:false,
+  },
+  CameraWindow: {
+    headerShown:false,
+  },
 };
 
 export default function App() {

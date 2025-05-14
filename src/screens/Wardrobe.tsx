@@ -234,7 +234,7 @@ export default function Wardrobe() {
         </Surface>
 
         {/* Bottom Section: Horizontal ScrollView of ClothCards */}
-        <Surface style={styles.bottomSection}>
+        {/* <Surface style={styles.bottomSection}>
           <Text style={styles.sectionTitle}>Your Wardrobe</Text>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             {cloths.map((cloth) => (
@@ -256,8 +256,9 @@ export default function Wardrobe() {
               </TouchableRipple>
             ))}
           </ScrollView>
-        </Surface>
+        </Surface> */}
         
+      </ScrollView>
         {/* Predict Button */}
         <Button
           mode="contained"
@@ -267,7 +268,6 @@ export default function Wardrobe() {
         >
           Predict
         </Button>
-      </ScrollView>
 
       {/* Modal for Camera/Upload options */}
       <Portal>
