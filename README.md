@@ -1,43 +1,108 @@
 # Style Snap: A Virtual Wardrobe Experience 👗✨
 
-**A culturally inclusive virtual try-on system for traditional Pakistani and Eastern attire**
+**A culturally inclusive virtual try-on app for traditional Pakistani and Eastern attire**
 
-[![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://python.org)
-[![PyTorch](https://img.shields.io/badge/PyTorch-Lightning-red.svg)](https://pytorch.org)
+<p align="center">
+  <img src="assets/icon.png" alt="Style Snap Logo" width="200"/>
+</p>
+
+[![Expo](https://img.shields.io/badge/Built%20with-Expo-1f2027.svg)](https://expo.dev)
+[![React Native](https://img.shields.io/badge/React%20Native-Mobile-blue.svg)](https://reactnative.dev)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
+---
 
 ## 🌟 Overview
 
-Style Snap is an advanced virtual try-on system built upon the StableVITON framework, specifically fine-tuned for traditional Pakistani and Eastern clothing. The system addresses a significant gap in current virtual try-on solutions by providing culturally inclusive experiences for traditional garments like kurtas, lawns, and traditional dresses.
+**Style Snap** is a mobile-first virtual try-on app powered by React Native and Expo, designed specifically for traditional Pakistani and Eastern clothing. The app uses an AI backend (based on StableVITON) for inference, offering users a seamless and culturally inclusive virtual try-on experience.
 
-### Key Features
+<p align="center">
+  <img src="assets/app-screenshot-1.jpg" alt="App Screenshot 1" width="250"/>
+  <img src="assets/app-screenshot-2.jpg" alt="App Screenshot 2" width="250"/>
+  <img src="assets/app-screenshot-3.jpg" alt="App Screenshot 3" width="250"/>
+</p>
 
-- **Cultural Focus**: Specialized for Pakistani and Eastern traditional attire
-- **Full Body Support**: Handles both upper and lower body garments
-- **High Fidelity**: Enhanced geometric precision and visual realism
-- **Advanced AI**: Built on StableVITON with custom improvements
-- **User-Friendly**: Intuitive interface for easy virtual try-on experiences
+---
 
-## 🎯 Problem Solved
+## 📱 Features
 
-Current virtual try-on systems primarily focus on Western clothing, leaving a significant gap for traditional Eastern attire. Style Snap bridges this gap by:
+- 🧕 **Culturally Focused**: Tailored for Eastern attire such as kurtas, shalwar kameez, and lawn suits
+- 🎯 **Virtual Try-On**: Upload your photo and preview garments in real-time
+- 💡 **User-Friendly UI**: Clean interface with filtering by style, color, and region
+- 🔄 **Expo-based App**: Cross-platform support via React Native & Expo
+- 🤖 **AI-Powered Backend**: Hosted via Docker for inference
 
-- Providing realistic virtual try-on for kurtas, lawns, and traditional dresses
-- Maintaining cultural authenticity in garment representation
-- Offering high-quality results with improved geometric alignment
-- Supporting diverse body poses and garment styles
+---
 
-## 🏗️ Architecture
+## 🧩 Tech Stack
 
-The system consists of three primary modules:
+- **Frontend**: React Native, Expo
+- **Backend**: StableVITON (Dockerized for inference)
+  - Inference Image: [`bazooka101/stableviton-app`](https://hub.docker.com/r/bazooka101/stableviton-app)
+  - Training Image: [`bazooka101/stable_viton`](https://hub.docker.com/r/bazooka101/stable_viton)
+- **AI Models**: Custom fine-tuned StableVITON for Eastern garments
+- **Languages**: TypeScript, Python
+- **Cloud/DevOps**: Docker, GitHub, AWS (optional)
 
-1. **Segmentation Module**: Generates agnostic person images and garment masks
-2. **Cross-Attention Warper**: Aligns garments to target poses using latent-space warping
-3. **Diffusion Generator**: Synthesizes final images with attention to realism
+---
 
-## 🚀 Performance Metrics
+## 🚀 Running the App
 
-Our model achieves impressive results on traditional Eastern garments:
+### 🔧 Prerequisites
+
+- [Node.js](https://nodejs.org/)
+- [Expo CLI](https://docs.expo.dev/get-started/installation/)
+- A working backend (see Docker images above)
+
+### 📲 Steps
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/ahmedmst2423/StableVITONApp.git
+   cd StableVITONApp
+   ```
+
+2. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+3. Start the Expo development server:
+
+   ```bash
+   npx expo start
+   ```
+
+4. Use the Expo Go app on your phone to scan the QR code and launch the app.
+
+---
+
+## 📦 Inference Server Setup
+
+To use the AI backend, run the Docker container locally or on a server:
+
+```bash
+docker pull bazooka101/stableviton-app
+docker run -p 8000:8000 bazooka101/stableviton-app
+```
+
+Make sure the app's API URL points to this backend.
+
+---
+
+## 🎨 Dataset
+
+Used for training the AI backend:
+
+- **Sources**: Limelight, Mohagni, MTJ, Junaid Jamshed
+- **Categories**: Kurtas, dresses, casual wear, traditional lawns
+- **Focus**: Pose diversity, cultural authenticity, high-res inputs
+
+---
+
+## 📊 Model Performance
 
 | Metric              | Value | Description             |
 | ------------------- | ----- | ----------------------- |
@@ -47,164 +112,58 @@ Our model achieves impressive results on traditional Eastern garments:
 | **Parsing mIoU**    | 0.78  | Segmentation quality    |
 | **Keypoint Error**  | 4.2px | Pose preservation       |
 
-## 📋 Requirements
+---
 
-### Hardware Requirements
+## 🧠 Architecture
 
-- **GPU**: NVIDIA RTX 3090 Ti or equivalent (recommended)
-- **RAM**: 64GB DDR4 (minimum 32GB)
-- **CPU**: Intel Core i9-11900K or equivalent
-- **Storage**: 50GB+ free space
+The system consists of:
 
-### Software Requirements
+1. **Segmentation Module**: Generates agnostic person images and garment masks
+2. **Cross-Attention Warper**: Aligns garments to target poses using latent-space warping
+3. **Diffusion Generator**: Synthesizes final images with attention to realism
 
-- Python 3.8+
-- PyTorch Lightning
-- CUDA 11.0+
-- OpenPose
-- Detectron2
-- Additional dependencies in `requirements.txt`
-
-## 🛠️ Installation
-
-1. **Clone the repository**
-
-   ```bash
-   git clone https://github.com/ahmedmst2423/StableVITONApp.git
-   cd StableVITONApp
-   ```
-
-2. **Create virtual environment**
-
-   ```bash
-   python -m venv style_snap_env
-   source style_snap_env/bin/activate  # On Windows: style_snap_env\Scripts\activate
-   ```
-
-3. **Install dependencies**
-
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. **Download pretrained models**
-
-   ```bash
-   # Download OpenPose models
-   python scripts/download_openpose_models.py
-
-   # Download StableVITON checkpoint
-   python scripts/download_stable_viton.py
-   ```
-
-5. **Setup configuration**
-   ```bash
-   cp config/config.example.yaml config/config.yaml
-   # Edit config.yaml with your settings
-   ```
-
-## 📱 Usage
-
-### For End Users
-
-1. **Launch the application**
-
-   ```bash
-   python app.py
-   ```
-
-2. **Upload your image**
-
-   - Use the web interface to upload a clear, full-body image
-   - Ensure good lighting and clear visibility of the person
-
-3. **Select garments**
-
-   - Browse through the catalog of traditional Eastern clothing
-   - Filter by style, color, and region
-   - Preview selections in real-time
-
-4. **Generate try-on**
-   - Click "Try On" to generate the virtual fitting
-   - Download results or share with others
-
-### For Developers
-
-```python
-from style_snap import VirtualTryOn
-
-# Initialize the model
-model = VirtualTryOn.load_from_checkpoint('path/to/checkpoint')
-
-# Perform virtual try-on
-result = model.try_on(
-    person_image='path/to/person.jpg',
-    garment_image='path/to/garment.jpg'
-)
-
-# Save result
-result.save('output/try_on_result.jpg')
-```
-
-## 🎨 Dataset
-
-The model is trained on a custom-curated dataset featuring:
-
-- **Sources**: Limelight, Mohagni, MTJ, Junaid Jamshed
-- **Categories**: Kurtas, dresses, casual wear, traditional lawns
-- **Quality**: High-resolution images with diverse poses and styles
-- **Cultural Focus**: Authentic Pakistani and Eastern garments
-
-## 🔧 Training
-
-To fine-tune the model on your own dataset:
-
-```bash
-python train.py \
-    --config config/train_config.yaml \
-    --data_path /path/to/your/dataset \
-    --epochs 100 \
-    --batch_size 4 \
-    --learning_rate 1e-4
-```
-
-## 📊 Evaluation
-
-Run evaluation on test dataset:
-
-```bash
-python evaluate.py \
-    --checkpoint path/to/model.ckpt \
-    --test_data path/to/test/data \
-    --output_dir results/
-```
+---
 
 ## 🤝 For Service Providers
 
-The system includes a service provider portal for:
+Coming soon — a portal for:
 
-- **Secure garment uploads** with metadata tagging
-- **Analytics dashboard** showing try-on frequency
-- **Category management** (style, color, region filters)
-- **Performance insights** for inventory optimization
+- **Garment Uploads** with metadata tagging
+- **Try-On Analytics** to track usage and engagement
+- **Category Management** for filtering by style, color, and region
+- **Insights Dashboard** for performance tracking
 
-## ⚠️ Known Limitations
+---
 
-- **Texture Blending**: Some residual blending between original and target textures
-- **Complex Patterns**: Occasional ghosting with heavily patterned fabrics
-- **Lighting Sensitivity**: Performance varies with image quality and lighting
+## ⚠️ Known Issues
 
-## 🛣️ Future Improvements
+- Residual texture blending on highly patterned fabrics
+- Ghosting effects under poor lighting conditions
+- Mobile-side performance reliant on backend server availability
 
-- Enhanced garment-body disentanglement techniques
-- Improved texture preservation methods
-- Expanded dataset with more regional variations
-- Mobile app development
-- Real-time processing optimization
+---
 
-## 📝 Citation
+## 🛣️ Future Roadmap
 
-If you use this work in your research, please cite:
+- 📱 Mobile-native inference with TensorFlow Lite or Core ML
+- 📊 Service provider analytics portal
+- 🧵 Texture fusion improvements
+- 🧬 Dataset expansion for regional diversity
+- 🕶️ AR Try-On integration
+
+---
+
+## 👥 Team
+
+- **Ahmed Mustafa** (21K-3370) – Lead Developer
+- **Anwer Saeed** (21K-3303) – AI/ML Engineer
+- **Shayan Anwar** (21K-4836) – Data Engineer
+
+**Supervisor**: Muhammad Nouman Durrani – FAST School of Computing, NUCES Karachi
+
+---
+
+## 📄 Citation
 
 ```bibtex
 @misc{stylesnap2025,
@@ -215,37 +174,15 @@ If you use this work in your research, please cite:
 }
 ```
 
-## 👥 Team
-
-- **Ahmed Mustafa** (21K-3370) - Lead Developer
-- **Anwer Saeed** (21K-3303) - AI/ML Engineer
-- **Shayan Anwar** (21K-4836) - Data Engineer
-
-**Supervisor**: Muhammad Nouman Durrani
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+---
 
 ## 🙏 Acknowledgments
 
-- StableVITON team for the foundational framework
+- StableVITON team for foundational work
 - FAST School of Computing, NUCES Karachi
-- Pakistani clothing brands for dataset contribution
-- Open source community for various tools and libraries
-
-## 📞 Support
-
-For technical support or questions:
-
-- Create an issue on GitHub
-- Contact: ahmed.mustafa@example.com
+- Pakistani clothing brands for dataset access
+- Open-source developers for enabling tools and libraries
 
 ---
 
-**Made with ❤️ for preserving cultural fashion through technology**
-
-![Logo](/assets/icon.png)
-![App ScreenShot]("/assets/Try-on-image-1.png")
-![App ScreenShot](/assets/Try-on-image-2.png)
-![App Screenshot](/assets/Try-on-image-3.png)
+**Made with ❤️ to preserve and modernize cultural fashion**
