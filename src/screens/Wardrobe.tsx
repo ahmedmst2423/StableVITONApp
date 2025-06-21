@@ -23,15 +23,7 @@ export default function Wardrobe() {
   const {pickImage} = useFileUtilities();
 
   // Sample cloth data
-  const cloths = [
-    {
-      id: 1,
-      image:
-        "https://img.freepik.com/free-psd/stylish-blue-plaid-shirt-men-isolated-transparent-background_191095-23034.jpg?semt=ais_hybrid",
-      name: "Casual Shirt",
-      type: "Western",
-      category: "Upper Body",
-    },
+  const cloths = [ 
     {
       id: 2,
       image:
@@ -41,18 +33,10 @@ export default function Wardrobe() {
       category: "Upper Body",
     },
     {
-      id: 3,
-      image:
-        "https://t3.ftcdn.net/jpg/04/83/25/50/360_F_483255019_m1r1ujM8EOkr8PamCHF85tQ0rHG3Fiqz.jpg",
-      name: "Jeans",
-      type: "Western",
-      category: "Lower Body",
-    },
-    {
       id: 11,
       image:
         "https://media.istockphoto.com/id/1618123205/photo/3d-rendering-of-a-black-t-shirt-isolated-on-a-white-background.jpg?s=2048x2048&w=is&k=20&c=EUuIEXH_5XAIPYDvssuGurhSjYLbmh07Yspdz24hubA=",
-      name: "V-Neck T-Shirt",
+       name: "V-Neck T-Shirt",
       type: "Western",
       category: "Upper Body",
     },
@@ -234,7 +218,7 @@ export default function Wardrobe() {
         </Surface>
 
         {/* Bottom Section: Horizontal ScrollView of ClothCards */}
-        {/* <Surface style={styles.bottomSection}>
+        <Surface style={styles.bottomSection}>
           <Text style={styles.sectionTitle}>Your Wardrobe</Text>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             {cloths.map((cloth) => (
@@ -256,7 +240,7 @@ export default function Wardrobe() {
               </TouchableRipple>
             ))}
           </ScrollView>
-        </Surface> */}
+        </Surface>
         
       </ScrollView>
         {/* Predict Button */}

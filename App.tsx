@@ -31,7 +31,7 @@ const routes = {
 const headerOptions = {
   Wardrobe: {
     // Use the custom WardrobeHeader as the header title for the Wardrobe screen
-    headerRight: () => <WardrobeHeader />,
+    // headerRight: () => <WardrobeHeader />,
   },
   TryOnWindow: {
     headerShown:false,
