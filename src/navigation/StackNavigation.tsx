@@ -11,7 +11,7 @@ interface StackNavigationProps {
   // Global header screen options for all screens
   globalScreenOptions?: StackNavigationOptions;
   // Per-screen header options mapping by route name
-  headerOptions?: Record<string, StackNavigationOptions>;
+  headerOptions?:any;
 }
 
 const StackNavigation: React.FC<StackNavigationProps> = ({ routes, globalScreenOptions, headerOptions }) => {

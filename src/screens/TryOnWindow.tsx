@@ -11,6 +11,7 @@ type RootStackParamList = {
 };
 
 type TryOnWindowRouteProp = RouteProp<RootStackParamList, 'TryOnWindow'>;
+type TryOnWindowRouteProp = RouteProp<RootStackParamList, 'TryOnWindow'>;
 
 export default function TryOnWindow() {
   const route = useRoute<TryOnWindowRouteProp>();
@@ -125,6 +126,7 @@ export default function TryOnWindow() {
         </Button>
       </ScrollView>
     </SafeAreaView>
+    </SafeAreaView>
   );
 }
 
@@ -139,7 +141,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     padding: 16,
+    padding: 16,
   },
+  card: {
+    width: '100%',
+    borderRadius: 12,
+    overflow: 'hidden',
+    marginBottom: 24,
   card: {
     width: '100%',
     borderRadius: 12,
@@ -149,9 +157,11 @@ const styles = StyleSheet.create({
   image: {
     height: windowHeight * 0.5,
     resizeMode: "cover",
+    resizeMode: "cover",
   },
   caption: {
     textAlign: "center",
+    marginTop: 12,
     marginTop: 12,
   },
   button: {

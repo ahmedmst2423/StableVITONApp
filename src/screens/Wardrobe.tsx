@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet, ScrollView, Image, Dimensions, View } from "react-native";
-import { Surface, Text, Button, TouchableRipple, Portal, Dialog, IconButton } from "react-native-paper";
+import { Surface, Text, Button, TouchableRipple, Portal, Dialog, IconButton, ActivityIndicator } from "react-native-paper";
 import ClothCard from "../components/ClothCard";
 import { useVtonImageContext } from "../contexts/VtonImageContext";
 import { useClothImageContext } from "../contexts/ClothImageContext";
@@ -9,12 +9,13 @@ import { useApiCall } from "../api/apiCall";
 import { useImageUtilities } from "../utilities/imageUtilities";
 import { useFileUtilities } from "../utilities/fileUtilities";
 import { useErrorContext } from "../contexts/ErrorContext";
+import axios from "axios";
 
 export default function Wardrobe() {
   const navigation = useNavigation<any>();
   const { vtonImageUri, setVtonImageUri } = useVtonImageContext();
   const { clothImageUri, setClothImageUri } = useClothImageContext();
-  const { apiCall } = useApiCall();
+  const { apiCall, isLoading: isApiLoading } = useApiCall();
   const { setError } = useErrorContext();
   const [selectedClothId, setSelectedClothId] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
@@ -22,6 +23,8 @@ export default function Wardrobe() {
   const {blobToBase64} = useImageUtilities();
   const {pickImage} = useFileUtilities();
 
+  // Ensure the API endpoint doesn't have a trailing slash for proper URL construction
+  const API_ENDPOINT = "https://59d4.110-38-229-3.ngrok-free.app"
   // Sample cloth data
   const cloths = [ 
     {
@@ -52,6 +55,12 @@ export default function Wardrobe() {
   };
 
   const handlePredict = async () => {
+    // Check if API is still initializing
+    if (isApiLoading) {
+      setError("API is still initializing. Please wait a moment and try again.");
+      return;
+    }
+    
     // Check if both images are available
     if (!vtonImageUri) {
       setError("No person image captured. Please take or upload a picture first.");
@@ -59,7 +68,7 @@ export default function Wardrobe() {
     }
     
     if (!clothImageUri && !selectedClothId) {
-      setError("No cloth selected. Please select a clothing item or take a picture of one.");
+      setError("No cloth selected. Please select a clothing item.");
       return;
     }
     
@@ -95,7 +104,32 @@ export default function Wardrobe() {
         };
 
         // Make a POST request to /predict with the JSON payload
-        const response = await apiCall.post("/predict", payload, {
+        // Ensure proper URL construction by checking for trailing slash
+        const url = API_ENDPOINT.endsWith('/') ? `${API_ENDPOINT}predict` : `${API_ENDPOINT}/predict`;
+        console.log('Making API call to:', url);
+        console.log('Payload size - image1:', localBase64.length, 'image2:', remoteBase64.length);
+        
+        // Try using the apiCall from context first (which might have interceptors and proper setup)
+        try {
+          console.log('Attempting to use apiCall from context');
+          const response = await apiCall.post('/predict', payload, {
+            headers: {
+              "Content-Type": "application/json",
+            },
+            responseType: "blob",
+          });
+          
+          // If successful, process the response
+          const predictionBase64 = await blobToBase64(response.data);
+          navigation.navigate("TryOnWindow", { prediction: predictionBase64 });
+          return; // Exit early if successful
+        } catch (contextApiError) {
+          console.log('Context API call failed, falling back to direct axios:', contextApiError);
+          // Fall back to direct axios call
+        }
+        
+        // Fallback: direct axios call with explicit timeout and additional options
+        const response = await axios.post(url, payload, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -108,6 +142,18 @@ export default function Wardrobe() {
         // Navigate to TryOnWindow with the prediction result
         navigation.navigate("TryOnWindow", { prediction: predictionBase64 });
       } catch (fetchError) {
+        console.error('API call error details:', fetchError);
+        // Check if it's a network error
+        if (fetchError.message && fetchError.message.includes('Network Error')) {
+          setError('Network error: Unable to connect to the server. Please check your internet connection and try again.');
+          return;
+        }
+        // Check if it's a timeout
+        if (fetchError.code === 'ECONNABORTED') {
+          setError('Request timed out. The server is taking too long to respond. Please try again later.');
+          return;
+        }
+
         const errorMessage = fetchError instanceof Error 
           ? fetchError.message 
           : "Failed to process images. Please try again.";
@@ -122,6 +168,8 @@ export default function Wardrobe() {
       setLoading(false);
     }
   };
+
+  
 
   const handleImagePickerOption = async (option: 'camera' | 'upload') => {
     setModalVisible(false);
@@ -217,7 +265,7 @@ export default function Wardrobe() {
           </TouchableRipple>
         </Surface>
 
-        {/* Bottom Section: Horizontal ScrollView of ClothCards */}
+        {/* Bottom Section: Horizontal ScrollView of ClothCards
         <Surface style={styles.bottomSection}>
           <Text style={styles.sectionTitle}>Your Wardrobe</Text>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -240,17 +288,19 @@ export default function Wardrobe() {
               </TouchableRipple>
             ))}
           </ScrollView>
-        </Surface>
+        </Surface> */}
         
       </ScrollView>
         {/* Predict Button */}
-        <Button
+        
+      </ScrollView>
+      <Button
           mode="contained"
           onPress={handlePredict}
           loading={loading}
           style={styles.predictButton}
         >
-          Predict
+          Try On
         </Button>
 
       {/* Modal for Camera/Upload options */}
@@ -285,6 +335,7 @@ export default function Wardrobe() {
 }
 
 const windowHeight = Dimensions.get("window").height;
+const windowWidth = Dimensions.get("window").width;
 
 const styles = StyleSheet.create({
   container: {
@@ -309,7 +360,7 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     width: "100%",
-    height: windowHeight * 0.25,
+    height: (windowWidth * 0.75), // 3/4 aspect ratio (height = width * 3/4)
     borderRadius: 8,
     marginBottom: 16,
     position: 'relative',

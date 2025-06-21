@@ -1,8 +1,17 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useErrorContext } from "./ErrorContext";
+
+// Storage key for the API endpoint
+const API_ENDPOINT_STORAGE_KEY = "app_api_endpoint";
+
+// Default API endpoint to use if none is stored
+const DEFAULT_API_ENDPOINT = "https://59d4.110-38-229-3.ngrok-free.app";
 
 export interface ApiContextType {
   endpoint: string;
   setEndpoint: (endpoint: string) => void;
+  isLoading: boolean;
 }
 
 const ApiContext = createContext<ApiContextType | undefined>(undefined);
@@ -12,7 +21,7 @@ export const ApiProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [endpoint, setEndpoint] = useState<string>("https://cf2d-110-38-229-3.ngrok-free.app");
 
   return (
-    <ApiContext.Provider value={{ endpoint, setEndpoint }}>
+    <ApiContext.Provider value={{ endpoint, setEndpoint, isLoading }}>
       {children}
     </ApiContext.Provider>
   );

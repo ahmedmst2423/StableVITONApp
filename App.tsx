@@ -23,8 +23,8 @@ const theme = {
 };
 
 const routes = {
-  Wardrobe: Wardrobe,
-  CameraWindow: CameraWindow,
+  Wardrobe:Wardrobe,
+  CameraWindow:CameraWindow,
   TryOnWindow:TryOnWindow
 };
 
